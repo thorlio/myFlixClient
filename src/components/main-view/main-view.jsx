@@ -1,3 +1,8 @@
+import { useState, useEffect } from "react";
+import { LoginView } from "../login-view/login-view";
+import { SignupView } from "../signup-view/signup-view";
+import { MovieCard } from "../movie-card/movie-card";
+
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
@@ -13,13 +18,14 @@ export const MainView = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
-      .then((movies) => setMovies(movies))
+      .then((data) => setMovies(data))
       .catch((err) => console.error("Error fetching movies:", err));
   }, [token]);
 
   if (!user) {
     return (
       <div>
+        <h1>Welcome to Flix and Chill!</h1>
         <LoginView
           onLoggedIn={(user, token) => {
             setUser(user);
