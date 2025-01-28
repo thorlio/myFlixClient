@@ -1,44 +1,64 @@
 import { useState, useEffect } from "react";
+import { LoginView } from "../login-view/login-view";
+import { SignupView } from "../signup-view/signup-view";
 import { MovieCard } from "../movie-card/movie-card";
-import { MovieView } from "../movie-view/movie-view";
 
 export const MainView = () => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const storedToken = localStorage.getItem("token");
+
+  const [user, setUser] = useState(storedUser ? storedUser : null);
+  const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [showSignup, setShowSignup] = useState(false);
 
   useEffect(() => {
-    fetch("https://flixandchill-0e85c940608d.herokuapp.com/movies")
+    if (!token) return;
+
+    fetch("https://flixandchill-0e85c940608d.herokuapp.com/movies", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("Movies data:", data); // Debugging step
-        setMovies(data);
-      })
-      .catch((error) => console.error("Error fetching movies:", error));
-  }, []);
+      .then((data) => setMovies(data))
+      .catch((error) => console.error("Fetch error:", error));
+  }, [token]);
 
-  if (selectedMovie) {
+  if (!user) {
     return (
-      <MovieView
-        movie={selectedMovie}
-        onBackClick={() => setSelectedMovie(null)}
-      />
+      <div>
+        {showSignup ? (
+          <SignupView />
+        ) : (
+          <LoginView
+            onLoggedIn={(user, token) => {
+              setUser(user);
+              setToken(token);
+            }}
+          />
+        )}
+        <button onClick={() => setShowSignup(!showSignup)}>
+          {showSignup ? "Back to Login" : "Signup"}
+        </button>
+      </div>
     );
-  }
-
-  if (movies.length === 0) {
-    return <div>The list is empty!</div>;
   }
 
   return (
     <div>
-      <h1>Welcome to MyFlix!</h1>
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie.id}
-          movie={movie} // Pass the movie object as a prop
-          onMovieClick={() => setSelectedMovie(movie)} // Pass the click handler
-        />
-      ))}
+      <button
+        onClick={() => {
+          setUser(null);
+          setToken(null);
+          localStorage.clear();
+        }}
+      >
+        Logout
+      </button>
+      <div>
+        {movies.map((movie) => (
+          <MovieCard key={movie._id} movie={movie} />
+        ))}
+      </div>
     </div>
   );
 };
