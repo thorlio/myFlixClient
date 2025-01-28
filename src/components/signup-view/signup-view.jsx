@@ -22,13 +22,13 @@ export const SignupView = () => {
     })
       .then((response) => {
         if (response.ok) {
-          alert("Signup successful! Please login.");
+          alert("Signup successful! Please log in.");
           window.location.reload();
         } else {
-          alert("Signup failed.");
+          alert("Signup failed");
         }
       })
-      .catch((error) => console.error("Signup error:", error));
+      .catch((err) => console.error("Signup error:", err));
   };
 
   return (
@@ -40,6 +40,7 @@ export const SignupView = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
+          minLength="3"
         />
       </label>
       <label>
@@ -66,6 +67,7 @@ export const SignupView = () => {
           type="date"
           value={birthday}
           onChange={(e) => setBirthday(e.target.value)}
+          required
         />
       </label>
       <button type="submit">Signup</button>

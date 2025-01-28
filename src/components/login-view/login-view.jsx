@@ -6,7 +6,10 @@ export const LoginView = ({ onLoggedIn }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = { Username: username, Password: password };
+    const data = {
+      Username: username,
+      Password: password,
+    };
 
     fetch("https://flixandchill-0e85c940608d.herokuapp.com/login", {
       method: "POST",
@@ -15,15 +18,13 @@ export const LoginView = ({ onLoggedIn }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.user && data.token) {
-          localStorage.setItem("user", JSON.stringify(data.user));
-          localStorage.setItem("token", data.token);
+        if (data.user) {
           onLoggedIn(data.user, data.token);
         } else {
-          alert("Login failed");
+          alert("Invalid login credentials");
         }
       })
-      .catch((error) => console.error("Login error:", error));
+      .catch((err) => console.error("Login error:", err));
   };
 
   return (

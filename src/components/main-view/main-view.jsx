@@ -1,9 +1,3 @@
-import { useState, useEffect } from "react";
-import { LoginView } from "../login-view/login-view";
-import { SignupView } from "../signup-view/signup-view";
-import { MovieCard } from "../movie-card/movie-card";
-import { MovieView } from "../movie-view/movie-view";
-
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
@@ -11,8 +5,6 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null); // Add this state
-  const [showSignup, setShowSignup] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -21,61 +13,57 @@ export const MainView = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
-      .then((data) => setMovies(data))
-      .catch((error) => console.error("Fetch error:", error));
+      .then((movies) => setMovies(movies))
+      .catch((err) => console.error("Error fetching movies:", err));
   }, [token]);
 
   if (!user) {
     return (
       <div>
-        {showSignup ? (
-          <SignupView />
-        ) : (
-          <LoginView
-            onLoggedIn={(user, token) => {
-              setUser(user);
-              setToken(token);
-              localStorage.setItem("user", JSON.stringify(user));
-              localStorage.setItem("token", token);
-            }}
-          />
-        )}
-        <button onClick={() => setShowSignup(!showSignup)}>
-          {showSignup ? "Back to Login" : "Signup"}
-        </button>
+        <LoginView
+          onLoggedIn={(user, token) => {
+            setUser(user);
+            setToken(token);
+            localStorage.setItem("user", JSON.stringify(user));
+            localStorage.setItem("token", token);
+          }}
+        />
+        <p>or</p>
+        <SignupView />
       </div>
-    );
-  }
-
-  if (selectedMovie) {
-    return (
-      <MovieView
-        movie={selectedMovie}
-        onBackClick={() => setSelectedMovie(null)} // Allow users to navigate back
-      />
     );
   }
 
   return (
     <div>
-      <button
-        onClick={() => {
-          setUser(null);
-          setToken(null);
-          localStorage.clear();
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          margin: "10px",
         }}
       >
-        Logout
-      </button>
-      <div>
-        {movies.map((movie) => (
-          <MovieCard
-            key={movie._id}
-            movie={movie}
-            onMovieClick={(selectedMovie) => setSelectedMovie(selectedMovie)} // Set the selected movie
-          />
-        ))}
+        <h1>Welcome, {user.Username}!</h1>
+        <button
+          onClick={() => {
+            setUser(null);
+            setToken(null);
+            localStorage.clear();
+          }}
+        >
+          Logout
+        </button>
       </div>
+
+      {movies.length === 0 ? (
+        <p>No movies available!</p>
+      ) : (
+        <div>
+          {movies.map((movie) => (
+            <MovieCard key={movie._id} movie={movie} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
