@@ -1,25 +1,32 @@
 import PropTypes from "prop-types";
 
 export const MovieView = ({ movie, onBackClick }) => {
+  console.log(movie); // Log to check the structure of the movie object
   return (
     <div className="movie-view">
       <button onClick={onBackClick}>Back</button>
-      <h2>{movie.Title}</h2>
-      <p>{movie.Description}</p>
+      <h2>{movie.title}</h2>
+      <p>{movie.description}</p>
       <p>
-        <strong>Director:</strong> {movie.Director || "Unknown"}
+        <strong>Director:</strong> {movie.director || "Unknown"}
       </p>
-      <img src={movie.ImagePath} alt={movie.Title} style={{ width: "300px" }} />
+      {movie.imagePath && (
+        <img
+          src={movie.imagePath}
+          alt={movie.title}
+          style={{ width: "300px" }}
+        />
+      )}
     </div>
   );
 };
 
 MovieView.propTypes = {
   movie: PropTypes.shape({
-    Title: PropTypes.string.isRequired,
-    Description: PropTypes.string.isRequired,
-    Director: PropTypes.string.isRequired, // Changed from object to string
-    ImagePath: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    director: PropTypes.string.isRequired, // Updated to match the API response
+    imagePath: PropTypes.string,
   }).isRequired,
   onBackClick: PropTypes.func.isRequired,
 };
