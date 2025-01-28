@@ -19936,7 +19936,7 @@ const SignupView = ()=>{
             Email: email,
             Birthday: birthday
         };
-        fetch("https://flixandchill-0e85c940608d.herokuapp.com/register", {
+        fetch("https://flixandchill-0e85c940608d.herokuapp.com/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
