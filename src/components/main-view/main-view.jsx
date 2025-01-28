@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { MovieCard } from "../movie-card/movie-card";
+import { MovieView } from "../movie-view/movie-view";
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -10,6 +11,7 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null); // Add this state
   const [showSignup, setShowSignup] = useState(false);
 
   useEffect(() => {
@@ -33,6 +35,8 @@ export const MainView = () => {
             onLoggedIn={(user, token) => {
               setUser(user);
               setToken(token);
+              localStorage.setItem("user", JSON.stringify(user));
+              localStorage.setItem("token", token);
             }}
           />
         )}
@@ -40,6 +44,15 @@ export const MainView = () => {
           {showSignup ? "Back to Login" : "Signup"}
         </button>
       </div>
+    );
+  }
+
+  if (selectedMovie) {
+    return (
+      <MovieView
+        movie={selectedMovie}
+        onBackClick={() => setSelectedMovie(null)} // Allow users to navigate back
+      />
     );
   }
 
@@ -56,7 +69,11 @@ export const MainView = () => {
       </button>
       <div>
         {movies.map((movie) => (
-          <MovieCard key={movie._id} movie={movie} />
+          <MovieCard
+            key={movie._id}
+            movie={movie}
+            onMovieClick={(selectedMovie) => setSelectedMovie(selectedMovie)} // Set the selected movie
+          />
         ))}
       </div>
     </div>
