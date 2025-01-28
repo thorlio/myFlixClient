@@ -18957,7 +18957,7 @@ const MovieCard = ({ movie, onMovieClick })=>{
             margin: "10px"
         },
         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-            children: movie.Title
+            children: movie.title
         }, void 0, false, {
             fileName: "src/components/movie-card/movie-card.jsx",
             lineNumber: 16,
@@ -18972,7 +18972,7 @@ const MovieCard = ({ movie, onMovieClick })=>{
 _c = MovieCard;
 MovieCard.propTypes = {
     movie: (0, _propTypesDefault.default).shape({
-        Title: (0, _propTypesDefault.default).string.isRequired
+        title: (0, _propTypesDefault.default).string.isRequired
     }).isRequired,
     onMovieClick: (0, _propTypesDefault.default).func.isRequired
 };

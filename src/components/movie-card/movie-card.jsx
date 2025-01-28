@@ -13,14 +13,14 @@ export const MovieCard = ({ movie, onMovieClick }) => {
         margin: "10px",
       }}
     >
-      <h3>{movie.Title}</h3>
+      <h3>{movie.title}</h3>
     </div>
   );
 };
 
 MovieCard.propTypes = {
   movie: PropTypes.shape({
-    Title: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
   }).isRequired,
   onMovieClick: PropTypes.func.isRequired,
 };
