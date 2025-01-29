@@ -14,7 +14,7 @@ export const MainView = () => {
   useEffect(() => {
     if (!token) return;
 
-    fetch("https://flixandchill-0e85c940608d.herokuapp.com/movies", {
+    fetch(`${process.env.REACT_APP_API_URL}/movies`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())

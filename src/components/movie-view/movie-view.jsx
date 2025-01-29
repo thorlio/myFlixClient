@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 export const MovieView = ({ movie, onBackClick }) => {
-  console.log(movie); // Log to check the structure of the movie object
+  console.log(movie);
   return (
     <div className="movie-view">
       <button onClick={onBackClick}>Back</button>
