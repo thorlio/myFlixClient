@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // Use React Router's useNavigate
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,6 +22,7 @@ export const LoginView = ({ onLoggedIn }) => {
       .then((data) => {
         if (data.user) {
           onLoggedIn(data.user, data.token);
+          navigate("/"); // Redirect to the main view after successful login
         } else {
           alert("Invalid login credentials");
         }

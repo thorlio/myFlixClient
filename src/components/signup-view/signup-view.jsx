@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const SignupView = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
+
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -23,14 +26,14 @@ export const SignupView = () => {
       .then((response) => {
         if (!response.ok) {
           return response.json().then((errData) => {
-            throw new Error(errData.message || "Signup failed");
+            throw new Error(errData.error || "Signup failed");
           });
         }
-        alert("Signup successful! Please log in.");
-        window.location.reload();
+        alert("Signup successful! Redirecting to login.");
+        navigate("/login"); // Redirect to the login page
       })
       .catch((err) => alert(`Signup error: ${err.message}`));
-    
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -44,6 +47,7 @@ export const SignupView = () => {
           minLength="3"
         />
       </label>
+      <br />
       <label>
         Password:
         <input
@@ -53,6 +57,7 @@ export const SignupView = () => {
           required
         />
       </label>
+      <br />
       <label>
         Email:
         <input
@@ -62,6 +67,7 @@ export const SignupView = () => {
           required
         />
       </label>
+      <br />
       <label>
         Birthday:
         <input
@@ -71,6 +77,7 @@ export const SignupView = () => {
           required
         />
       </label>
+      <br />
       <button type="submit">Signup</button>
     </form>
   );
