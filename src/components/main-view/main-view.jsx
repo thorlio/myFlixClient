@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
-import { LoginView } from "../login-view/login-view";
-import { SignupView } from "../signup-view/signup-view";
+import { useNavigate } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
 
 export const MainView = () => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const storedToken = localStorage.getItem("token");
-
-  const [user, setUser] = useState(storedUser ? storedUser : null);
-  const [token, setToken] = useState(storedToken ? storedToken : null);
+  const navigate = useNavigate();
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const [token, setToken] = useState(
+    () => localStorage.getItem("token") || null
+  );
   const [movies, setMovies] = useState([]);
 
+  // Fetch movies once token is available
   useEffect(() => {
     if (!token) return;
-
     fetch(`${process.env.REACT_APP_API_URL}/movies`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -22,22 +24,21 @@ export const MainView = () => {
       .catch((err) => console.error("Error fetching movies:", err));
   }, [token]);
 
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.clear();
+    navigate("/login");
+  };
+
   if (!user) {
-    return (
-      <div>
-        <h1>Welcome to Flix and Chill!</h1>
-        <LoginView
-          onLoggedIn={(user, token) => {
-            setUser(user);
-            setToken(token);
-            localStorage.setItem("user", JSON.stringify(user));
-            localStorage.setItem("token", token);
-          }}
-        />
-        <p>or</p>
-        <SignupView />
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -46,16 +47,14 @@ export const MainView = () => {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          margin: "10px",
+          padding: "20px",
+          background: "#f0f0f0",
         }}
       >
         <h1>Welcome, {user.Username}!</h1>
         <button
-          onClick={() => {
-            setUser(null);
-            setToken(null);
-            localStorage.clear();
-          }}
+          onClick={handleLogout}
+          style={{ padding: "10px", cursor: "pointer" }}
         >
           Logout
         </button>
@@ -64,7 +63,13 @@ export const MainView = () => {
       {movies.length === 0 ? (
         <p>No movies available!</p>
       ) : (
-        <div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "20px",
+          }}
+        >
           {movies.map((movie) => (
             <MovieCard key={movie._id} movie={movie} />
           ))}

@@ -1,13 +1,16 @@
-import { createRoot } from 'react-dom/client';
-import { MainView } from './components/main-view/main-view';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { MainView } from "./components/main-view/main-view";
+import { LoginView } from "./components/login-view/login-view";
+import { SignupView } from "./components/signup-view/signup-view";
 
-// Import statement to indicate that you need to bundle `./index.scss`
-import "./index.scss";
-
-const App = () => {
-  return <MainView />;
- };
- 
- const container = document.querySelector("#root");
- const root = createRoot(container);
- root.render(<App />);
+export const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainView />} />
+        <Route path="/login" element={<LoginView />} />
+        <Route path="/register" element={<SignupView />} />
+      </Routes>
+    </Router>
+  );
+};
