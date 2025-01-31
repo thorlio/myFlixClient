@@ -21,15 +21,16 @@ export const SignupView = () => {
       body: JSON.stringify(data),
     })
       .then((response) => {
-        if (response.ok) {
-          alert("Signup successful! Please log in.");
-          window.location.reload();
-        } else {
-          alert("Signup failed");
+        if (!response.ok) {
+          return response.json().then((errData) => {
+            throw new Error(errData.message || "Signup failed");
+          });
         }
+        alert("Signup successful! Please log in.");
+        window.location.reload();
       })
-      .catch((err) => console.error("Signup error:", err));
-  };
+      .catch((err) => alert(`Signup error: ${err.message}`));
+    
 
   return (
     <form onSubmit={handleSubmit}>
