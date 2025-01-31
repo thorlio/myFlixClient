@@ -12,12 +12,9 @@
     "@babel/core": "^7.26.7",
     "@babel/preset-env": "^7.26.7",
     "@babel/preset-react": "^7.26.3",
-    "babel-loader": "^9.2.1",
-    "css-loader": "^7.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1",
-    "style-loader": "^4.0.0"
+    "react-scripts": "^5.0.1"
   },
   "browserslist": {
     "production": [
@@ -32,6 +29,12 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "css-loader": "^7.1.2",
+    "postcss-loader": "^8.1.1",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.83.4",
+    "sass-loader": "^10.1.1",
+    "style-loader": "^4.0.0"
   }
 }
